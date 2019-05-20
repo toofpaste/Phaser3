@@ -2,6 +2,8 @@ var sprite;
 let ratio = 720 / 216;
 let isHit = false;
 let enHit = false;
+var enHealth = 100;
+var playHealth = 100;
 var GameScene = new Phaser.Class({
 
   Extends: Phaser.Scene,
@@ -22,8 +24,11 @@ var GameScene = new Phaser.Class({
   },
 
 
+
   preload: function ()
   {
+    this.load.image('bg', 'assets/wallside.png');
+    //this.load.image('bg11', 'assets/wallside.png');
     this.load.image('bg1', 'assets/far-buildings.png');
     this.load.image('bg2', 'assets/back-buildings.png');
     this.load.image('bg3', 'assets/foreground.png');
@@ -34,8 +39,8 @@ var GameScene = new Phaser.Class({
     this.load.spritesheet('character3', 'assets/adventurer-hand-combat-Sheet.png',{frameWidth: 50, frameHeight: 37});
 
     this.load.spritesheet('enemy', 'assets/LightBandit_Spritesheet.png',{frameWidth: 48, frameHeight: 48});
-    this.load.spritesheet('health', 'assets/Gradient_Health_Bar.png', {frameWidth: 200, frameHeight: 26});
-    this.load.spritesheet('health2', 'assets/Gradient_Health_Bar.png', {frameWidth: 200, frameHeight: 26});
+    this.load.spritesheet('health', 'assets/Gradient_Health_Bar.png', {frameWidth: 203, frameHeight: 26});
+    this.load.spritesheet('health2', 'assets/Gradient_Health_Bar.png', {frameWidth: 203, frameHeight: 26});
 
 
   },
@@ -56,8 +61,10 @@ var GameScene = new Phaser.Class({
     // this.bg5.tileScaleX = this.bg5.tileScaleY = 3;
 
     var platforms = this.physics.add.staticGroup();
+    var platforms2 = this.physics.add.staticGroup();
 
 		platforms.create(16 * 2, game.config.height - 16 * 2, 'bg').setScale(4).refreshBody();
+  //  platforms2.create(500, 500, 'bg11').setScale(4).setOrigin(-200, 200);
       this.bg1.setScrollFactor(0);
   		this.bg2.setScrollFactor(0);
   		this.bg3.setScrollFactor(0);
@@ -106,6 +113,67 @@ var GameScene = new Phaser.Class({
     		this.player.body.setOffset(14, 4);
         this.physics.add.collider(this.enemy, platforms);
     		this.physics.add.collider(this.player, platforms);
+      //  this.physics.add.collider(this.player, platforms2);
+        this.anims.create({
+        key: 'enemyHealthFull',
+        frames: this.anims.generateFrameNumbers('health2', { start: 0, end: 0 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'enemyHealth3',
+        frames: this.anims.generateFrameNumbers('health2', { start: 1, end: 1 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'enemyHealth2',
+        frames: this.anims.generateFrameNumbers('health2', { start: 2, end: 2 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'enemyHealth1',
+        frames: this.anims.generateFrameNumbers('health2', { start: 3, end: 3 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'enemyHealth0',
+        frames: this.anims.generateFrameNumbers('health2', { start: 4, end: 4 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'playerHealthFull',
+        frames: this.anims.generateFrameNumbers('health', { start: 0, end: 0 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'playerHealth3',
+        frames: this.anims.generateFrameNumbers('health', { start: 1, end: 1 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'playerHealth2',
+        frames: this.anims.generateFrameNumbers('health', { start: 2, end: 2 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'playerHealth1',
+        frames: this.anims.generateFrameNumbers('health', { start: 3, end: 3 }),
+        frameRate: 1,
+        repeat: 0
+        });
+        this.anims.create({
+        key: 'playerHealth0',
+        frames: this.anims.generateFrameNumbers('health', { start: 4, end: 4 }),
+        frameRate: 1,
+        repeat: 0
+        });
 
         this.anims.create({
   			key: 'walk',
@@ -135,6 +203,12 @@ var GameScene = new Phaser.Class({
   			frameRate: 8,
   			repeat: 0
   		});
+      this.anims.create({
+        key: 'dead',
+        frames: this.anims.generateFrameNumbers('character3', { start: 39, end: 39}),
+        frameRate: 1,
+        repeat: 0
+      });
       this.anims.create({
   			key: 'kick',
   			frames: this.anims.generateFrameNumbers('character3', { start: 19, end: 27 }),
@@ -171,6 +245,12 @@ var GameScene = new Phaser.Class({
   			frameRate: 9,
   			repeat: -1
   		});
+      this.anims.create({
+        key: 'deadEnemy',
+        frames: this.anims.generateFrameNumbers('enemy', { start: 35, end: 35 }),
+        frameRate: 1,
+        repeat: 0
+      });
 
       this.anims.create({
         key: 'slide',
@@ -215,6 +295,7 @@ var GameScene = new Phaser.Class({
     var player = this.player;
     var enemy = this.enemy;
     var health = this.health;
+    var health2 = this.health2;
     this.bg1.tilePositionX = this.cameras.main.scrollX * .2 / ratio;
     this.bg2.tilePositionX = this.cameras.main.scrollX * .4 / ratio;
     this.bg3.tilePositionX = this.cameras.main.scrollX * .6 / ratio;
@@ -234,10 +315,9 @@ var GameScene = new Phaser.Class({
     this.health2.body.setVelocityY(-500);
     this.health2.setGravityY(-1);
     this.health2.x = this.cameras.main.scrollX + 1080;
-    console.log("poop" +  this.cameras.main.scrollX);
 
 
-    if(((enemy.x - player.x  <= 500) && (enemy.x - player.x  >= 175) && enemyGround) && onGround){
+    if(((enemy.x - player.x  <= 500) && (enemy.x - player.x  >= 175) && enemyGround) && onGround && enHealth > 0){
       enemy.setVelocityX(-100);
       enemyMoving = true;
       enemy.flipX = false;
@@ -245,7 +325,7 @@ var GameScene = new Phaser.Class({
       enemyMoving = false;
 
     }
-    if(((enemy.x - player.x  >= -500) && (enemy.x - player.x  <= -175) && enemyGround) && onGround){
+    if(((enemy.x - player.x  >= -500) && (enemy.x - player.x  <= -175) && enemyGround) && onGround && enHealth > 0){
       enemy.setVelocityX(100);
       enemy.flipX = true;
       enemyMoving = true;
@@ -254,14 +334,16 @@ var GameScene = new Phaser.Class({
 
     }
 
-    if(((enemy.x - player.x) <= 185 && (enemy.x - player.x) >= 1) && (player.y - enemy.y) <= 185 && (player.y - enemy.y) >= 1){
+    if(((enemy.x - player.x) <= 185 && (enemy.x - player.x) >= 1) && (player.y - enemy.y) <= 185 && (player.y - enemy.y) >= 1 && enHealth > 0){
       player.setVelocityX(0);
+      playHealth -= 4;
       player.body.velocity.x = -400;
       player.body.velocity.y = -300;
       enHit = true;
       isHit = true;
       player.setGravityX(200);
-    }else if(((enemy.x - player.x) >= -185 && (enemy.x - player.x) <= 1) && (player.y - enemy.y) <= 185 && (player.y - enemy.y) >= 1){
+    }else if(((enemy.x - player.x) >= -185 && (enemy.x - player.x) <= 1) && (player.y - enemy.y) <= 185 && (player.y - enemy.y) >= 1 && enHealth > 0){
+      playHealth -= 4;
       player.setVelocityX(0);
       player.body.velocity.x = 400;
       player.body.velocity.y = -300;
@@ -270,24 +352,38 @@ var GameScene = new Phaser.Class({
       player.setGravityX(-200);
     }
     this.physics.world.collide(this.player, this.enemy, function(player, enemy){
-        if(((enemy.body.touching.up && player.body.touching.down) || (!enemy.body.touching.right && !player.body.touching.left) || (enemy.body.touching.left && player.body.touching.right)) && !cursors.space.isDown){
+        if(((enemy.body.touching.up && player.body.touching.down) || (!enemy.body.touching.right && !player.body.touching.left) || (enemy.body.touching.left && player.body.touching.right)) && !cursors.space.isDown && !cursors.shift.isDown){
             enemy.setGravityX(-200);
             enemy.setBounceX(0.01);
         }
-        else if(((enemy.body.touching.up && player.body.touching.down) || (enemy.body.touching.right && player.body.touching.left) || (!enemy.body.touching.left && !player.body.touching.right)) && !cursors.space.isDown){
+        else if(((enemy.body.touching.up && player.body.touching.down) || (enemy.body.touching.right && player.body.touching.left) || (!enemy.body.touching.left && !player.body.touching.right)) && !cursors.space.isDown && !cursors.shift.isDown){
           enemy.setGravityX(200);
           enemy.setBounceX(0.01);
-        }else if(((enemy.body.touching.left && player.body.touching.right) || (!enemy.body.touching.right && !player.body.touching.left)) && cursors.space.isDown){
+        }else if(((enemy.body.touching.left && player.body.touching.right) || (!enemy.body.touching.right && !player.body.touching.left)) && cursors.space.isDown && enHealth > 0 && !cursors.shift.isDown){
+          enHealth -= 2;
           enemy.setVelocityX(0);
           enemy.body.velocity.x = 300;
           enemy.body.velocity.y = -400;
           enemy.setGravityX(-200);
-        } else if(((!enemy.body.touching.left && !player.body.touching.right) || (enemy.body.touching.right && player.body.touching.left)) && cursors.space.isDown){
+        } else if(((!enemy.body.touching.left && !player.body.touching.right) || (enemy.body.touching.right && player.body.touching.left)) && cursors.space.isDown && enHealth > 0 && !cursors.shift.isDown){
+          enHealth -= 2;
           enemy.setVelocityX(0);
           enemy.body.velocity.x = -300;
           enemy.body.velocity.y = -400;
           enemy.setGravityX(200);
-          }
+        }else if(((enemy.body.touching.left && player.body.touching.right) || (!enemy.body.touching.right && !player.body.touching.left)) && cursors.shift.isDown && enHealth > 0){
+          enHealth -= 1;
+          enemy.setVelocityX(0);
+          enemy.body.velocity.x = 100;
+          enemy.body.velocity.y = -200;
+          enemy.setGravityX(-200);
+        }else if(((!enemy.body.touching.left && !player.body.touching.right) || (enemy.body.touching.right && player.body.touching.left)) && cursors.shift.isDown && enHealth > 0){
+          enHealth -= 1;
+          enemy.setVelocityX(0);
+          enemy.body.velocity.x = -100;
+          enemy.body.velocity.y = -200;
+          enemy.setGravityX(200);
+        }
       });
 
       // console.log("enemy" + Math.abs(enemy.body.velocity.x));
@@ -296,13 +392,13 @@ var GameScene = new Phaser.Class({
       // player 863
       // enemy 960
       //accelerateTo: function (gameObject, x, y, speed, xSpeedMax, ySpeedMax)
-      if((((this.enemy.body.position.x - this.player.body.position.x) <= 100) && cursors.space.isDown) && enemy.x > player.x){
+      if((((this.enemy.body.position.x - this.player.body.position.x) <= 100) && cursors.space.isDown) && enemy.x > player.x && playHealth > 0){
           enemy.body.velocity.x = 300;
           enemy.body.velocity.y = -400;
           enemy.setGravityX(-200);
           // enemy.accelerateTo(this.enemy, (this.enemy.body.position.x + 500), (this.enemy.body.position.y + 500), 5, 5, 5);
           // enemy.setGravityX(-150);
-      }else if (((Math.abs(this.enemy.body.position.x - this.player.body.position.x) <= 100) && cursors.space.isDown) && enemy.x < player.x){
+      }else if (((Math.abs(this.enemy.body.position.x - this.player.body.position.x) <= 100) && cursors.space.isDown) && enemy.x < player.x && playHealth > 0){
         enemy.body.velocity.x = -300;
         enemy.body.velocity.y = -400;
         enemy.setGravityX(200);
@@ -322,18 +418,18 @@ var GameScene = new Phaser.Class({
 
 
 
-    if (cursors.up.isDown && onGround) {
+    if (cursors.up.isDown && onGround && playHealth > 0) {
   			player.setVelocityY(-530);
 
   		}
 
-  		if (cursors.left.isDown && onGround) {
+  		if (cursors.left.isDown && onGround && playHealth > 0) {
   			player.setVelocityX(-400); // move left
         //health.setVelocityX(-400);
   			moving = true;
   			player.flipX = true;
   		}
-  		else if (cursors.right.isDown && onGround) {
+  		else if (cursors.right.isDown && onGround && playHealth > 0) {
   			player.setVelocityX(400);
         //health.setVelocityX(400);
   			moving = true;
@@ -342,7 +438,7 @@ var GameScene = new Phaser.Class({
         //health.setVelocityX(0);
   			player.setVelocityX(0);
   		}
-      if(cursors.space.isDown && onGround)
+      if(cursors.space.isDown && onGround && playHealth > 0)
       {
         if(player.flipX){
         player.body.setSize(35, 32, false);
@@ -361,36 +457,65 @@ var GameScene = new Phaser.Class({
         moving = false;
       }
 
-      if (!enemyGround && !enemyMoving) {
+      if(enHealth > 75){
+        health2.anims.play('enemyHealthFull', true);
+      }else if(enHealth <= 75 && enHealth > 50){
+        health2.anims.play('enemyHealth3', true);
+      }else if(enHealth <= 50 && enHealth > 25){
+        health2.anims.play('enemyHealth2', true);
+      }else if(enHealth <= 25 && enHealth > 0){
+        health2.anims.play('enemyHealth1', true);
+      }else if(enHealth <= 0){
+        health2.anims.play('enemyHealth0', true);
+      }
+      if(playHealth > 75){
+        health.anims.play('playerHealthFull', true);
+      }else if(playHealth <= 75 && playHealth > 50){
+        health.anims.play('playerHealth3', true);
+      }else if(playHealth <= 50 && playHealth > 25){
+        health.anims.play('playerHealth2', true);
+      }else if(playHealth <= 25 && playHealth > 0){
+        health.anims.play('playerHealth1', true);
+      }else if(playHealth <= 0){
+        health.anims.play('playerHealth0', true);
+      }
+
+      if (!enemyGround && !enemyMoving && enHealth > 0) {
         enemy.anims.play('hurtEnemy', true);
-  		} else if(enemyMoving && enemyGround && !isClose){
+  		} else if(enemyMoving && enemyGround && !isClose && enHealth > 0){
         enemy.anims.play('runEnemy', true);
-      }else if(((howClose <= 300) && isHeight) || enHit){
+      }else if(((howClose <= 300) && isHeight && enHealth > 0) || enHit){
         enemy.setVelocityX(0);
         enemy.anims.play('attackEnemy', true);
-      }else{
+      }else if(enHealth > 0){
         enemy.anims.play('idleEnemy', true);
-  		}
+  		}else {
+        this.enemy.body.setSize(39, 22, false);
+        this.enemy.body.setOffset(6, 20);
+        enemy.anims.play('deadEnemy', true);
+      }
 
-  		if (!onGround && !cursors.space.isDown && !isHit && !cursors.shift.isDown) {
+  		if (!onGround && !cursors.space.isDown && !isHit && !cursors.shift.isDown && playHealth > 0) {
   			player.anims.play('jump', true);
-  		} else if(cursors.space.isDown && !isHit){
+  		} else if(cursors.space.isDown && !isHit && playHealth > 0){
         player.anims.play('attack', true);
 
-      }else if (moving) {
+      }else if (moving && playHealth > 0) {
   			player.anims.play('walk', true);
-  		} else if(isHit){
+  		} else if(isHit && playHealth > 0){
         player.anims.play('hurt', true);
-      }else if(cursors.shift.isDown){
+      }else if(cursors.shift.isDown && playHealth > 0){
         player.anims.play('kick', true);
-      }else{
+      }else if (playHealth > 0){
   			player.anims.play('idle', true);
-  		}
+  		}else {
+        player.anims.play('dead', true);
+      }
       BKey.on('Down', function (event){
         player.anims.play('kick', true);
       });
 
-      if(onGround && cursors.down.isDown)
+      if(onGround && cursors.down.isDown && playHealth > 0)
       {
         player.anims.play('slide',true);
       }
