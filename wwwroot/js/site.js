@@ -178,7 +178,7 @@ var GameScene = new Phaser.Class({
         this.anims.create({
   			key: 'walk',
   			frames: this.anims.generateFrameNumbers('character', { start: 8, end: 13 }),
-  			frameRate: 6,
+  			frameRate: 14,
   			repeat: -1
   		});
 
@@ -236,7 +236,7 @@ var GameScene = new Phaser.Class({
       this.anims.create({
         key: 'runEnemy',
         frames: this.anims.generateFrameNumbers('enemy', { start: 8, end: 15 }),
-        frameRate: 6,
+        frameRate: 15,
         repeat: -1
       });
       this.anims.create({
@@ -317,16 +317,16 @@ var GameScene = new Phaser.Class({
     this.health2.x = this.cameras.main.scrollX + 1080;
 
 
-    if(((enemy.x - player.x  <= 500) && (enemy.x - player.x  >= 175) && enemyGround) && onGround && enHealth > 0){
-      enemy.setVelocityX(-100);
+    if(((enemy.x - player.x  <= 2000) && (enemy.x - player.x  >= 175) && enemyGround) && onGround && enHealth > 0){
+      enemy.setVelocityX(-450);
       enemyMoving = true;
       enemy.flipX = false;
     }else if(enemy.x - player.x  <= 175){
       enemyMoving = false;
 
     }
-    if(((enemy.x - player.x  >= -500) && (enemy.x - player.x  <= -175) && enemyGround) && onGround && enHealth > 0){
-      enemy.setVelocityX(100);
+    if(((enemy.x - player.x  >= -2000) && (enemy.x - player.x  <= -175) && enemyGround) && onGround && enHealth > 0){
+      enemy.setVelocityX(450);
       enemy.flipX = true;
       enemyMoving = true;
     }else if(enemy.x - player.x  <= -175){

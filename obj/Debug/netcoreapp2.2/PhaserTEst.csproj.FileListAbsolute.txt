@@ -45,7 +45,6 @@
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/PhaserTEst.TagHelpers.output.cache
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/PhaserTEst.RazorCoreGenerate.cache
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/Razor/Views/Home/Index.g.cshtml.cs
-/Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/Razor/Views/Home/Privacy.g.cshtml.cs
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/Razor/Views/Shared/Error.g.cshtml.cs
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/Razor/Views/Shared/_CookieConsentPartial.g.cshtml.cs
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/Razor/Views/Shared/_Layout.g.cshtml.cs
@@ -58,3 +57,5 @@
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/PhaserTEst.dll
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/PhaserTEst.pdb
 /Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/PhaserTEst.csproj.CopyComplete
+/Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/Razor/Views/Item/Index.g.cshtml.cs
+/Users/Guest/Desktop/Phaser3/obj/Debug/netcoreapp2.2/Razor/Views/Item/Privacy.g.cshtml.cs
